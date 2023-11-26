@@ -1,0 +1,11 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:navigationBarColor">#19253b</item>
+        <item name="android:navigationBarDividerColor">#19253b</item>
+        <item name="android:statusBarColor">#19253b</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <item name="android:windowBackground">@drawable/splash_image_def</item>
+        <item name="android:windowClipToOutline">false</item>
+    </style>
+</resources>
