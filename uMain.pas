@@ -83,6 +83,8 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure layoutImageBaseGesture(Sender: TObject;
       const EventInfo: TGestureEventInfo; var Handled: Boolean);
+    procedure mviewMenuStartShowing(Sender: TObject);
+    procedure mviewMenuHidden(Sender: TObject);
   private type
     TToolType = (Move, Eraser);
   private var
@@ -527,6 +529,18 @@ begin
   scrollHBar.ViewportSize := layoutScrollBase.Width;
   scrollVBar.ViewportSize := layoutScrollBase.Height;
   SetImageSize;
+end;
+
+procedure TfrmMain.mviewMenuHidden(Sender: TObject);
+begin
+  // ドロワーを開く画像に
+  SetMVButtonVisible(False);
+end;
+
+procedure TfrmMain.mviewMenuStartShowing(Sender: TObject);
+begin
+  // ドロワーを閉じる画像に
+  SetMVButtonVisible(True);
 end;
 
 procedure TfrmMain.OpEraserClickHandler(Sender: TObject);
