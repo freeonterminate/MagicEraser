@@ -183,6 +183,8 @@ begin
 
     ShowWaiter;
     try
+      mviewMenu.HideMaster;
+
       Service.TakeImageFromLibrary(nil, P);
       InitScrollBar;
     finally
@@ -195,7 +197,6 @@ begin
     if FIsDesktop and dlgOpen.Execute then
     begin
       ShowWaiter;
-      mviewMenu.HideMaster;
 
       TThread.CreateAnonymousThread(
         procedure
@@ -208,6 +209,7 @@ begin
               procedure
               begin
                 InitScrollBar;
+                mviewMenu.HideMaster;
                 HideWaiter;
               end
             );
@@ -222,21 +224,35 @@ procedure TfrmMain.FileSaveClickHandler(Sender: TObject);
 begin
   if not imgImage.Bitmap.IsEmpty then
   begin
-    // デスクトップ環境では保存ダイアログで保存
-    if FIsDesktop and dlgSave.Execute then
+    ShowWaiter;
+
+    if FIsDesktop then
     begin
-      ShowWaiter;
-      try
-        imgImage.Bitmap.SaveToFile(dlgSave.FileName);
-      finally
+      // デスクトップ環境では保存ダイアログで保存先を選択
+      if dlgSave.Execute then
+        TThread.CreateAnonymousThread(
+          procedure
+          begin
+            try
+              imgImage.Bitmap.SaveToFile(dlgSave.FileName);
+            finally
+              TThread.Synchronize(
+                nil,
+                procedure
+                begin
+                  mviewMenu.HideMaster;
+                  HideWaiter;
+                end
+              );
+            end;
+          end
+        ).Start
+      else
         HideWaiter;
-      end;
     end
     else
     begin
       // モバイル環境では Shared Pictures に保存
-      ShowWaiter;
-
       TThread.CreateAnonymousThread(
         procedure
         begin
@@ -250,6 +266,7 @@ begin
               nil,
               procedure
               begin
+                mviewMenu.HideMaster;
                 HideWaiter;
               end
             );
@@ -429,7 +446,7 @@ begin
     end;
   end;
 
-  // 二本指でドラッグで移動
+  // 二本指ドラッグで移動
   if EventInfo.GestureID = igiPan then
   begin
     if
