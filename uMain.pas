@@ -91,7 +91,6 @@ type
     FIsDesktop: Boolean;
     FTool: TToolType;
     FLastDistance: Single;
-    FLastPos: TPointF;
     FScreenScale: Single;
     FZoomScale: Single;
     FSetImageSizeProcessing: Boolean;
@@ -444,29 +443,9 @@ begin
       var D := Max(WH + (EventInfo.Distance - FLastDistance), 10);
       SetZoomScale(FZoomScale * D / WH);
     end;
+
+    FLastDistance := EventInfo.Distance;
   end;
-
-  // 二本指ドラッグで移動
-  if EventInfo.GestureID = igiPan then
-  begin
-    if
-      (not (TInteractiveGestureFlag.gfBegin in EventInfo.Flags))and
-      (not (TInteractiveGestureFlag.gfEnd in EventInfo.Flags))
-    then
-    begin
-      var DX := EventInfo.Location.X - FLastPos.X;
-      var DY := EventInfo.Location.Y - FLastPos.Y;
-
-      scrollHBar.Value :=
-        EnsureRange(scrollHBar.Value + DX, scrollHBar.Min, scrollHBar.Max);
-
-      scrollVBar.Value :=
-        EnsureRange(scrollVBar.Value + DY, scrollVBar.Min, scrollVBar.Max);
-    end;
-  end;
-
-  FLastDistance := EventInfo.Distance;
-  FLastPos := EventInfo.Location;
 end;
 
 procedure TfrmMain.layoutImageBaseMouseDown(
