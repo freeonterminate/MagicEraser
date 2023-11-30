@@ -307,7 +307,7 @@ begin
   dlgSave.Filter := dlgOpen.Filter;
   layoutImageBase.AutoCapture := True;
 
-  // 講師画像を作成
+  // 市松模様画像を作成
   FAlphaBitmap := TBitmap.Create(16, 16);
 
   var Data: TBitmapData;
@@ -493,7 +493,7 @@ begin
       Move:
         DragImage;
 
-      // 消しゴムモードならα格子を描く
+      // 消しゴムモードなら市松模様を描く
       Eraser:
         if not imgImage.Bitmap.IsEmpty then
           with imgImage.Bitmap.Canvas do
